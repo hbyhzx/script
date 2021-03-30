@@ -3,7 +3,7 @@ name: Mirror to Gitee Repo
 on:
   watch:
     types: started
- schedule:
+  schedule:
     - cron: '35 */2 * * *'
 
 jobs:
