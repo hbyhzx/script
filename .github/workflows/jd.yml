@@ -1,8 +1,10 @@
 name: Mirror to Gitee Repo
 
-on: 
+on:
   watch:
     types: started
+ schedule:
+    - cron: '35 */2 * * *'
 
 jobs:
   git-mirror:
@@ -10,6 +12,7 @@ jobs:
     steps:
       - name: Configure Private Key
         env:
+          PAT: ${{ secrets.PAT }}
           SSH_PRIVATE_KEY: ${{ secrets.GITEE_PRIVATE_KEY }}
         run: |
           mkdir -p ~/.ssh
@@ -18,7 +21,11 @@ jobs:
           echo "StrictHostKeyChecking no" >> ~/.ssh/config
       - name: Push Mirror
         env:
-          SOURCE_REPO: 'https://github.com/hbyhzx/script.git'
-          DESTINATION_REPO: 'git@gitee.com:lxk0301/jd_scripts.git'
+          SOURCE_REPO: 'git@gitee.com:lxk0301/jd_scripts.git'
+          DESTINATION_REPO: 'git@github.com:hbyhzx/script.git'
         run: |
-          git clone --mirror "$DESTINATION_REPO" && cd `basename "$DESTINATION_REPO"`
+          git clone --mirror "$SOURCE_REPO" && cd `basename "$SOURCE_REPO"`
+          git remote set-url origin "$DESTINATION_REPO"
+          git fetch -p origin
+          git for-each-ref --format 'delete %(refname)' refs/pull | git update-ref --stdin
+          git push --mirror
