@@ -21,4 +21,4 @@ jobs:
           SOURCE_REPO: 'https://github.com/hbyhzx/script.git'
           DESTINATION_REPO: 'git@gitee.com:lxk0301/jd_scripts.git'
         run: |
-          git clone --mirror "DESTINATION_REPO"         
+          git clone --mirror "$DESTINATION_REPO"
