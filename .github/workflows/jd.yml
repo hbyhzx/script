@@ -1,6 +1,8 @@
 name: Mirror to Gitee Repo
 
-on: [ push, delete, create ]
+on: 
+  watch:
+    types: started
 
 jobs:
   git-mirror:
