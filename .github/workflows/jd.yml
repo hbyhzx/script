@@ -22,7 +22,7 @@ jobs:
       - name: Push Mirror
         env:
           SOURCE_REPO: 'git@gitee.com:lxk0301/jd_scripts.git'
-          DESTINATION_REPO: 'https://github.com:hbyhzx/script.git'
+          DESTINATION_REPO: 'https://github.com/hbyhzx/script.git'
         run: |
           git clone --mirror "$SOURCE_REPO" && cd `basename "$SOURCE_REPO"`
           git remote set-url origin "$DESTINATION_REPO"
