@@ -26,5 +26,3 @@ jobs:
           git clone --mirror "$SOURCE_REPO" && cd `basename "$SOURCE_REPO"`
           git remote set-url origin "$DESTINATION_REPO"
           echo "$DESTINATION_REPO"
-          Username: hbyh
-          Password: $PAT
