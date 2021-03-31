@@ -1,0 +1,30 @@
+name: Mirror to Gitee Repo
+on:
+  watch:
+    types: started
+  schedule:
+    - cron: '35 */2 * * *'
+
+jobs:
+  git-mirror:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Configure Private Key
+        env:
+          PAT: ${{ secrets.GITEE_TOKEN }}
+          SSH_PRIVATE_KEY: ${{ secrets.GITEE_PRIVATE_KEY }}
+        run: |
+          mkdir -p ~/.ssh
+          echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          echo "StrictHostKeyChecking no" >> ~/.ssh/config
+      - name: Push Mirror
+        env:
+          SOURCE_REPO: 'git@gitee.com:lxk0301/jd_scripts.git'
+          DESTINATION_REPO: 'https://github.com/hbyh/jd_scripts.git'
+        run: |
+          git clone --mirror "$SOURCE_REPO" && cd `basename "$SOURCE_REPO"`
+          git remote set-url origin "$DESTINATION_REPO"
+          git push --mirror
+          Username: hbyh
+          Password: $PAT
