@@ -29,3 +29,5 @@ jobs:
           git fetch -p origin
           git for-each-ref --format 'delete %(refname)' refs/pull | git update-ref --stdin
           git push --mirror
+          Username: hbyhzx
+          Password: $PAT
