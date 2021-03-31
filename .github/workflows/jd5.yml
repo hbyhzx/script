@@ -23,6 +23,7 @@ jobs:
           SOURCE_REPO: 'git@gitee.com:lxk0301/jd_scripts.git'
           DESTINATION_REPO: "https://hbyh:$GITEE_TOKEN@gitee.com/hbyh/jd_scripts.git"
         run: |
-          git clone --mirror "$SOURCE_REPO" && cd `basename "$SOURCE_REPO"`
-          git remote  "$DESTINATION_REPO"
-          git push 
+          git remote set-url origin "$DESTINATION_REPO"
+          git fetch -p origin
+          git for-each-ref --format 'delete %(refname)' refs/pull | git update-ref --stdin
+          git push --mirror
