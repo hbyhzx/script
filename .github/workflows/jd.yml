@@ -11,7 +11,7 @@ jobs:
     steps:
       - name: Configure Private Key
         env:
-          PAT: ${{ secrets.GITEE_TOKEN }}
+          GITEE_TOKEN: ${{ secrets.GITEE_TOKEN }}
           SSH_PRIVATE_KEY: ${{ secrets.GITEE_PRIVATE_KEY }}
         run: |
           mkdir -p ~/.ssh
@@ -21,10 +21,10 @@ jobs:
       - name: Push Mirror
         env:
           SOURCE_REPO: 'git@gitee.com:lxk0301/jd_scripts.git'
-          DESTINATION_REPO: 'https://hbyh:$PAT@gitee.com/hbyh/jd_scripts.git'
+          DESTINATION_REPO: "https://hbyh:$GITEE_TOKEN@gitee.com/hbyh/jd_scripts.git"
         run: |
           git clone --mirror "$SOURCE_REPO" && cd `basename "$SOURCE_REPO"`
           git remote set-url origin "$DESTINATION_REPO"
-          git push --mirror
+          git push --mirror "$DESTINATION_REPO"
           Username: hbyh
           Password: $PAT
