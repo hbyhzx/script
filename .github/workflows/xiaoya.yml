@@ -1,0 +1,56 @@
+name: xiaya
+
+on:
+  push:
+  schedule:
+    - cron: '0 */2 * * *'
+  workflow_dispatch:
+  watch:
+    types: started
+jobs:
+  build:
+
+    runs-on: ubuntu-18.04
+    if: github.event.repository.owner.id == github.event.sender.id
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@master
+    - name: Initialization environment
+      env:
+        DEBIAN_FRONTEND: noninteractive
+      run: |
+        sudo apt-get update
+        sudo apt-get -y install sqlite3 wget unzip sed
+        test -e ./update.zip && rm ./update.zip
+        test -e ./update.sql && rm ./update.sql
+        test -e ./data.db && rm ./data.db
+        wget -O ./update.zip --header="user-agent: AppelWebKit" http://docker.xiaoya.pro/update/update.zip
+        unzip -o ./update.zip -d ./
+        sed -i '/^#/d' ./update.sql
+        sqlite3 ./data.db < ./update.sql
+        sqlite3 ./data.db <<EOF
+        .output ./init.txt
+        select mount_path,addition 
+        from x_storages 
+        where driver="AliyundriveShare"
+            and mount_path<>"/"
+        ORDER by mount_path;
+        .output stdout
+        .quit
+        EOF
+    - name: commit
+      id: commit
+      run: |
+        git config --global user.email 2486251172@qq.com
+        git config --global user.name hbyhzx
+        git add .
+        git commit -m "update readme content"
+      continue-on-error: true
+    - name: Check on failures
+      if: steps.commit.outputs.status == 'failure'
+      run: exit 1
+    - name: Push changes
+      uses: ad-m/github-push-action@master
+      with:
+        github_token: ${{ secrets.TOKEN }}
