@@ -47,4 +47,9 @@ jobs:
         git add .
         git commit -m "update readme content"
       continue-on-error: true
-
+    - name: Push changes
+      uses: ad-m/github-push-action@master
+      with:
+          BRANCH: master
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          force: true
