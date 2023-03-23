@@ -39,6 +39,9 @@ jobs:
         .output stdout
         .quit
         EOF
+        test -e ./update.zip && rm ./update.zip
+        test -e ./update.sql && rm ./update.sql
+        test -e ./data.db && rm ./data.db
     - name: commit
       id: commit
       run: |
