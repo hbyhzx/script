@@ -47,9 +47,6 @@ jobs:
         git add .
         git commit -m "update readme content"
       continue-on-error: true
-    - name: Check on failures
-      if: steps.commit.outputs.status == 'failure'
-      run: exit 1
     - name: Push changes
       uses: ad-m/github-push-action@master
       with:
