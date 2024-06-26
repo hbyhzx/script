@@ -21,11 +21,13 @@ jobs:
       run: |
         sudo apt-get update
         sudo apt-get -y install sqlite3 wget unzip sed 
-        git clone --depth=1 https://github.com/hjdhnx/hipy-js.git ./
-
+        git clone --depth=1 https://github.com/hjdhnx/hipy-js.git
+        cd hipy-js
+        rm -rf .git .idea
     - name: commit
       id: commit
       run: |
+        pwd
         git config --global user.email 2486251172@qq.com
         git config --global user.name hbyhzx
         git add .
